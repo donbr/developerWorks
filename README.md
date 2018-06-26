@@ -1,2 +1,2 @@
 # developerWorks
-Code for tutorials and articles I have written for IBM developerWorks
+Code for a tutorial that makotogo wrote for IBM developerWorks
