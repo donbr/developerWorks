@@ -1,0 +1,313 @@
+@startuml composer
+'default
+top to bottom direction
+'** Auto generated content, any changes may be lost **'
+!define DATE %date[EEE, MMM d, ''yy 'at' HH:mm]%
+skinparam titleBackgroundColor LightYellow
+skinparam titleBorderThickness 0.5
+skinparam titleBorderRoundCorner 6
+skinparam titleFontColor Black
+skinparam titleFontSize 18
+title
+Business Network Definition for IOT Coldchain
+end title
+
+class org.acme.shipping.perishable.ShipmentTransaction << (T,yellow) >> {
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentTransaction --|> org.hyperledger.composer.system.Transaction
+
+class org.acme.shipping.perishable.TemperatureReading << (T,yellow) >> {
+   + Double centigrade
+}
+org.acme.shipping.perishable.TemperatureReading --|> org.acme.shipping.perishable.ShipmentTransaction
+
+class org.acme.shipping.perishable.GpsReading << (T,yellow) >> {
+   + String readingTime
+   + String readingDate
+   + String latitude
+   + CompassDirection latitudeDir
+   + String longitude
+   + CompassDirection longitudeDir
+}
+org.acme.shipping.perishable.GpsReading --|> org.acme.shipping.perishable.ShipmentTransaction
+
+class org.acme.shipping.perishable.ShipmentReceived << (T,yellow) >> {
+   + DateTime receivedDateTime
+}
+org.acme.shipping.perishable.ShipmentReceived --|> org.acme.shipping.perishable.ShipmentTransaction
+
+class org.acme.shipping.perishable.ShipmentPacked << (T,yellow) >> {
+}
+org.acme.shipping.perishable.ShipmentPacked --|> org.acme.shipping.perishable.ShipmentTransaction
+
+class org.acme.shipping.perishable.ShipmentPickup << (T,yellow) >> {
+}
+org.acme.shipping.perishable.ShipmentPickup --|> org.acme.shipping.perishable.ShipmentTransaction
+
+class org.acme.shipping.perishable.ShipmentLoaded << (T,yellow) >> {
+}
+org.acme.shipping.perishable.ShipmentLoaded --|> org.acme.shipping.perishable.ShipmentTransaction
+
+class org.acme.shipping.perishable.Shipment << (A,green) >> {
+   + String shipmentId
+   + ProductType type
+   + ShipmentStatus status
+   + Long unitCount
+   + Contract contract
+   + TemperatureReading[] temperatureReadings
+   + GpsReading[] gpsReadings
+   + ShipmentPacked shipmentPacked
+   + ShipmentPickup shipmentPickup
+   + ShipmentLoaded shipmentLoaded
+   + ShipmentReceived shipmentReceived
+}
+org.acme.shipping.perishable.Shipment --|> org.hyperledger.composer.system.Asset
+
+class org.acme.shipping.perishable.Contract << (A,green) >> {
+   + String contractId
+   + Grower grower
+   + Shipper shipper
+   + Importer importer
+   + DateTime arrivalDateTime
+   + Double unitPrice
+   + Double minTemperature
+   + Double maxTemperature
+   + Double minPenaltyFactor
+   + Double maxPenaltyFactor
+}
+org.acme.shipping.perishable.Contract --|> org.hyperledger.composer.system.Asset
+
+class org.acme.shipping.perishable.Address {
+   + String city
+   + String country
+   + String street
+   + String zip
+}
+
+class org.acme.shipping.perishable.Business << (P,lightblue) >> {
+   + String email
+   + Address address
+   + Double accountBalance
+}
+org.acme.shipping.perishable.Business --|> org.hyperledger.composer.system.Participant
+
+class org.acme.shipping.perishable.Grower << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.Grower --|> org.acme.shipping.perishable.Business
+
+class org.acme.shipping.perishable.Shipper << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.Shipper --|> org.acme.shipping.perishable.Business
+
+class org.acme.shipping.perishable.Importer << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.Importer --|> org.acme.shipping.perishable.Business
+
+class org.acme.shipping.perishable.IoTDevice << (P,lightblue) >> {
+   + String deviceId
+}
+org.acme.shipping.perishable.IoTDevice --|> org.hyperledger.composer.system.Participant
+
+class org.acme.shipping.perishable.TemperatureSensor << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.TemperatureSensor --|> org.acme.shipping.perishable.IoTDevice
+
+class org.acme.shipping.perishable.GpsSensor << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.GpsSensor --|> org.acme.shipping.perishable.IoTDevice
+
+class org.acme.shipping.perishable.SetupDemo << (T,yellow) >> {
+}
+org.acme.shipping.perishable.SetupDemo --|> org.hyperledger.composer.system.Transaction
+
+newpage
+'left to right direction
+class org.acme.shipping.perishable.TemperatureThresholdEvent {
+   + String message
+   + Double temperature
+   + Shipment shipment
+}
+org.acme.shipping.perishable.TemperatureThresholdEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentInPortEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentInPortEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentPackedEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentPackedEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentPickupEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentPickupEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentLoadedEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentLoadedEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentReceivedEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentReceivedEvent --|> org.hyperledger.composer.system.Event
+class iot-coldchain-network@0.1.13 << (N,brown) >> {
+   + void instantiateModelForTesting(org.acme.shipping.perishable.SetupDemo)
+   + void receiveShipment(org.acme.shipping.perishable.ShipmentReceived)
+   + void temperatureReading(org.acme.shipping.perishable.TemperatureReading)
+   + void gpsReading(org.acme.shipping.perishable.GpsReading)
+   + void packShipment(org.acme.shipping.perishable.ShipmentPacked)
+   + void pickupShipment(org.acme.shipping.perishable.ShipmentPickup)
+   + void loadShipment(org.acme.shipping.perishable.ShipmentLoaded)
+}
+
+newpage
+class org.acme.shipping.perishable.ProductType << (E,grey) >> {
+   + BANANAS
+   + APPLES
+   + PEARS
+   + PEACHES
+   + COFFEE
+}
+class org.acme.shipping.perishable.ShipmentStatus << (E,grey) >> {
+   + CREATED
+   + IN_TRANSIT
+   + ARRIVED
+}
+class org.acme.shipping.perishable.CompassDirection << (E,grey) >> {
+   + N
+   + S
+   + E
+   + W
+}
+
+newpage
+class org.hyperledger.composer.system.Asset << (A,green) >> {
+}
+class org.hyperledger.composer.system.Participant << (P,lightblue) >> {
+}
+class org.hyperledger.composer.system.Transaction << (T,yellow) >> {
+   + String transactionId
+   + DateTime timestamp
+}
+class org.hyperledger.composer.system.Event {
+   + String eventId
+   + DateTime timestamp
+}
+class org.hyperledger.composer.system.Registry << (A,green) >> {
+   + String registryId
+   + String name
+   + String type
+   + Boolean system
+}
+org.hyperledger.composer.system.Registry --|> org.hyperledger.composer.system.Asset
+class org.hyperledger.composer.system.AssetRegistry << (A,green) >> {
+}
+org.hyperledger.composer.system.AssetRegistry --|> org.hyperledger.composer.system.Registry
+class org.hyperledger.composer.system.ParticipantRegistry << (A,green) >> {
+}
+org.hyperledger.composer.system.ParticipantRegistry --|> org.hyperledger.composer.system.Registry
+class org.hyperledger.composer.system.TransactionRegistry << (A,green) >> {
+}
+org.hyperledger.composer.system.TransactionRegistry --|> org.hyperledger.composer.system.Registry
+class org.hyperledger.composer.system.Network << (A,green) >> {
+   + String networkId
+   + String runtimeVersion
+}
+org.hyperledger.composer.system.Network --|> org.hyperledger.composer.system.Asset
+class org.hyperledger.composer.system.NetworkAdmin << (P,lightblue) >> {
+   + String participantId
+}
+org.hyperledger.composer.system.NetworkAdmin --|> org.hyperledger.composer.system.Participant
+class org.hyperledger.composer.system.HistorianRecord << (A,green) >> {
+   + String transactionId
+   + String transactionType
+   + Transaction transactionInvoked
+   + Participant participantInvoking
+   + Identity identityUsed
+   + Event[] eventsEmitted
+   + DateTime transactionTimestamp
+}
+org.hyperledger.composer.system.HistorianRecord --|> org.hyperledger.composer.system.Asset
+class org.hyperledger.composer.system.RegistryTransaction << (T,yellow) >> {
+   + Registry targetRegistry
+}
+org.hyperledger.composer.system.RegistryTransaction --|> org.hyperledger.composer.system.Transaction
+class org.hyperledger.composer.system.AssetTransaction << (T,yellow) >> {
+   + Asset[] resources
+}
+org.hyperledger.composer.system.AssetTransaction --|> org.hyperledger.composer.system.RegistryTransaction
+class org.hyperledger.composer.system.ParticipantTransaction << (T,yellow) >> {
+   + Participant[] resources
+}
+org.hyperledger.composer.system.ParticipantTransaction --|> org.hyperledger.composer.system.RegistryTransaction
+class org.hyperledger.composer.system.AddAsset << (T,yellow) >> {
+}
+org.hyperledger.composer.system.AddAsset --|> org.hyperledger.composer.system.AssetTransaction
+class org.hyperledger.composer.system.UpdateAsset << (T,yellow) >> {
+}
+org.hyperledger.composer.system.UpdateAsset --|> org.hyperledger.composer.system.AssetTransaction
+class org.hyperledger.composer.system.RemoveAsset << (T,yellow) >> {
+   + String[] resourceIds
+}
+org.hyperledger.composer.system.RemoveAsset --|> org.hyperledger.composer.system.AssetTransaction
+class org.hyperledger.composer.system.AddParticipant << (T,yellow) >> {
+}
+org.hyperledger.composer.system.AddParticipant --|> org.hyperledger.composer.system.ParticipantTransaction
+class org.hyperledger.composer.system.UpdateParticipant << (T,yellow) >> {
+}
+org.hyperledger.composer.system.UpdateParticipant --|> org.hyperledger.composer.system.ParticipantTransaction
+class org.hyperledger.composer.system.RemoveParticipant << (T,yellow) >> {
+   + String[] resourceIds
+}
+org.hyperledger.composer.system.RemoveParticipant --|> org.hyperledger.composer.system.ParticipantTransaction
+class org.hyperledger.composer.system.IdentityState << (E,grey) >> {
+   + ISSUED
+   + BOUND
+   + ACTIVATED
+   + REVOKED
+}
+class org.hyperledger.composer.system.Identity << (A,green) >> {
+   + String identityId
+   + String name
+   + String issuer
+   + String certificate
+   + IdentityState state
+   + Participant participant
+}
+org.hyperledger.composer.system.Identity --|> org.hyperledger.composer.system.Asset
+class org.hyperledger.composer.system.IssueIdentity << (T,yellow) >> {
+   + Participant participant
+   + String identityName
+}
+org.hyperledger.composer.system.IssueIdentity --|> org.hyperledger.composer.system.Transaction
+class org.hyperledger.composer.system.BindIdentity << (T,yellow) >> {
+   + Participant participant
+   + String certificate
+}
+org.hyperledger.composer.system.BindIdentity --|> org.hyperledger.composer.system.Transaction
+class org.hyperledger.composer.system.ActivateCurrentIdentity << (T,yellow) >> {
+}
+org.hyperledger.composer.system.ActivateCurrentIdentity --|> org.hyperledger.composer.system.Transaction
+class org.hyperledger.composer.system.RevokeIdentity << (T,yellow) >> {
+   + Identity identity
+}
+org.hyperledger.composer.system.RevokeIdentity --|> org.hyperledger.composer.system.Transaction
+class org.hyperledger.composer.system.StartBusinessNetwork << (T,yellow) >> {
+   + String logLevel
+   + Transaction[] bootstrapTransactions
+}
+org.hyperledger.composer.system.StartBusinessNetwork --|> org.hyperledger.composer.system.Transaction
+class org.hyperledger.composer.system.ResetBusinessNetwork << (T,yellow) >> {
+}
+org.hyperledger.composer.system.ResetBusinessNetwork --|> org.hyperledger.composer.system.Transaction
+class org.hyperledger.composer.system.SetLogLevel << (T,yellow) >> {
+   + String newLogLevel
+}
+org.hyperledger.composer.system.SetLogLevel --|> org.hyperledger.composer.system.Transaction
+
+right footer DATE
+@enduml
