@@ -1,2 +1,1 @@
-# developerWorks
-Code for a tutorial that makotogo wrote for IBM developerWorks
+Based on the Hyperledger Composer Perishable Goods sample network and Steven Perry's developerWorks tutorial that customizes it.
