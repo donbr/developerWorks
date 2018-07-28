@@ -1,0 +1,162 @@
+@startuml composer
+'** Auto generated content, any changes may be lost **'
+!define DATE %date[EEE, MMM d, ''yy 'at' HH:mm]%
+skinparam class {
+  Font {
+    Color Black
+    Style Plain
+    Size 16
+  }
+}
+skinparam title {
+  BackgroundColor LightYellow
+  BorderThickness 0.5
+  BorderRoundCorner 6
+  FontColor Black
+  FontSize 18
+}
+title
+Business Network Definition for 'perishable.cto'
+end title
+class org.acme.shipping.perishable.ProductType << (E,grey) >> {
+   + BANANAS
+   + APPLES
+   + PEARS
+   + PEACHES
+   + COFFEE
+}
+class org.acme.shipping.perishable.ShipmentStatus << (E,grey) >> {
+   + CREATED
+   + IN_TRANSIT
+   + ARRIVED
+}
+class org.acme.shipping.perishable.CompassDirection << (E,grey) >> {
+   + N
+   + S
+   + E
+   + W
+}
+class org.acme.shipping.perishable.ShipmentTransaction << (T,yellow) >> {
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentTransaction --|> org.hyperledger.composer.system.Transaction
+class org.acme.shipping.perishable.TemperatureReading << (T,yellow) >> {
+   + Double centigrade
+}
+org.acme.shipping.perishable.TemperatureReading --|> org.acme.shipping.perishable.ShipmentTransaction
+class org.acme.shipping.perishable.GpsReading << (T,yellow) >> {
+   + String readingTime
+   + String readingDate
+   + String latitude
+   + CompassDirection latitudeDir
+   + String longitude
+   + CompassDirection longitudeDir
+}
+org.acme.shipping.perishable.GpsReading --|> org.acme.shipping.perishable.ShipmentTransaction
+class org.acme.shipping.perishable.ShipmentReceived << (T,yellow) >> {
+   + DateTime receivedDateTime
+}
+org.acme.shipping.perishable.ShipmentReceived --|> org.acme.shipping.perishable.ShipmentTransaction
+class org.acme.shipping.perishable.ShipmentPacked << (T,yellow) >> {
+}
+org.acme.shipping.perishable.ShipmentPacked --|> org.acme.shipping.perishable.ShipmentTransaction
+class org.acme.shipping.perishable.ShipmentPickup << (T,yellow) >> {
+}
+org.acme.shipping.perishable.ShipmentPickup --|> org.acme.shipping.perishable.ShipmentTransaction
+class org.acme.shipping.perishable.ShipmentLoaded << (T,yellow) >> {
+}
+org.acme.shipping.perishable.ShipmentLoaded --|> org.acme.shipping.perishable.ShipmentTransaction
+class org.acme.shipping.perishable.Shipment << (A,green) >> {
+   + String shipmentId
+   + ProductType type
+   + ShipmentStatus status
+   + Long unitCount
+   + Contract contract
+   + TemperatureReading[] temperatureReadings
+   + GpsReading[] gpsReadings
+   + ShipmentPacked shipmentPacked
+   + ShipmentPickup shipmentPickup
+   + ShipmentLoaded shipmentLoaded
+   + ShipmentReceived shipmentReceived
+}
+org.acme.shipping.perishable.Shipment --|> org.hyperledger.composer.system.Asset
+class org.acme.shipping.perishable.Contract << (A,green) >> {
+   + String contractId
+   + Grower grower
+   + Shipper shipper
+   + Importer importer
+   + DateTime arrivalDateTime
+   + Double unitPrice
+   + Double minTemperature
+   + Double maxTemperature
+   + Double minPenaltyFactor
+   + Double maxPenaltyFactor
+}
+org.acme.shipping.perishable.Contract --|> org.hyperledger.composer.system.Asset
+class org.acme.shipping.perishable.Address {
+   + String city
+   + String country
+   + String street
+   + String zip
+}
+class org.acme.shipping.perishable.Business << (P,lightblue) >> {
+   + String email
+   + Address address
+   + Double accountBalance
+}
+org.acme.shipping.perishable.Business --|> org.hyperledger.composer.system.Participant
+class org.acme.shipping.perishable.Grower << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.Grower --|> org.acme.shipping.perishable.Business
+class org.acme.shipping.perishable.Shipper << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.Shipper --|> org.acme.shipping.perishable.Business
+class org.acme.shipping.perishable.Importer << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.Importer --|> org.acme.shipping.perishable.Business
+class org.acme.shipping.perishable.IoTDevice << (P,lightblue) >> {
+   + String deviceId
+}
+org.acme.shipping.perishable.IoTDevice --|> org.hyperledger.composer.system.Participant
+class org.acme.shipping.perishable.TemperatureSensor << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.TemperatureSensor --|> org.acme.shipping.perishable.IoTDevice
+class org.acme.shipping.perishable.GpsSensor << (P,lightblue) >> {
+}
+org.acme.shipping.perishable.GpsSensor --|> org.acme.shipping.perishable.IoTDevice
+class org.acme.shipping.perishable.SetupDemo << (T,yellow) >> {
+}
+org.acme.shipping.perishable.SetupDemo --|> org.hyperledger.composer.system.Transaction
+class org.acme.shipping.perishable.TemperatureThresholdEvent {
+   + String message
+   + Double temperature
+   + Shipment shipment
+}
+org.acme.shipping.perishable.TemperatureThresholdEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentInPortEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentInPortEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentPackedEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentPackedEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentPickupEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentPickupEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentLoadedEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentLoadedEvent --|> org.hyperledger.composer.system.Event
+class org.acme.shipping.perishable.ShipmentReceivedEvent {
+   + String message
+   + Shipment shipment
+}
+org.acme.shipping.perishable.ShipmentReceivedEvent --|> org.hyperledger.composer.system.Event
+right footer DATE
+@enduml
