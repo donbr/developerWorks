@@ -4,7 +4,7 @@
   },
   "name": "iot-coldchain-network",
   "version": "0.1.13",
-  "description": "Advanced Perishable Goods Business Network",
+  "description": "Coldchain Business Network",
   "networkImage": "https://github.com/donbr/developerWorks/iot-coldchain-network/networkimage.svg",
   "networkImageanimated": "https://github.com/donbr/developerWorks/iot-coldchain-network/networkimageanimated.svg",
   "scripts": {
